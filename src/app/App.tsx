@@ -1,11 +1,26 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './rootReducer';
+
+import { RepoSearchForm } from 'features/repoSearch/RepoSearchForm';
+
 import {
     displayRepo,
     setCurrentDisplayType,
     setCurrentPage
 } from 'features/issuesDisplay/issuesDisplaySlice';
+
+const ORG = 'rails'
+const REPO = 'rails'
+
+type CurrentDisplay =
+    | {
+        type: 'issues'
+    }
+    | {
+        type: 'comments'
+        issueId: number
+    }
 
 const App: React.FC = () => {
     const dispatch = useDispatch();
@@ -30,7 +45,20 @@ const App: React.FC = () => {
         dispatch(setCurrentDisplayType({ displayType: 'comments', issueId }));
     };
 
-    return <div>Live reload</div>
+    let content;
+
+    if (displayType === 'issues') {
+        content = (
+            <RepoSearchForm
+                org={org}
+                repo={repo}
+                setOrgAndRepo={setOrgAndRepo}
+                setJumpToPage={setJumpToPage}
+            />
+        )
+    }
+
+    return <div>{content}</div>
 };
 
 export default App;
